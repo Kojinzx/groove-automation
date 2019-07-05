@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "be33645a-cf8f-4ec0-ae5a-a159faf01ea0",
+		"name": "API_Automation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Films",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "76a4308c-85d0-4128-a25b-eaf423f91cd5",
+						"exec": [
+							"var responseJSON = pm.response.json();",
+							"var results = responseJSON.results;",
+							"var director = \"George Lucas\"",
+							"var producer = \"Rick McCallum\"",
+							"var titles = [];",
+							"",
+							"tests['response json contains count'] = _.has(responseJSON, 'count');",
+							"tests['response json contains next'] = _.has(responseJSON, 'next');",
+							"tests['response json contains previous'] = _.has(responseJSON, 'previous');",
+							"tests['response json contains results'] = _.has(responseJSON, 'results');",
+							"tests[\"response code is 200 SUCCESS\"] = responseCode.code === 200;",
+							"",
+							"for (let i = 0; i < results.length; i++) {",
+							"    ",
+							"    if (results[i].director == director && results[i].producer.search(producer) > -1){",
+							"        titles.push(results[i].title);",
+							"    }",
+							"}",
+							"console.log(titles);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://swapi.co/api/films/",
+					"protocol": "http",
+					"host": [
+						"swapi",
+						"co"
+					],
+					"path": [
+						"api",
+						"films",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Planets",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cdd2f830-9388-4490-b631-b2c44a9d97df",
+						"exec": [
+							"var responseJSON = pm.response.json();",
+							"var detail;",
+							"",
+							"tests[\"response code is 404 SUCCESS\"] = responseCode.code === 404;",
+							"tests['response json contains detail'] = _.has(responseJSON, 'detail');",
+							"tests['Detail passed via request url params has value \"Not found\"'] = (_.get(responseJSON, 'detail') === \"Not found\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4d27cb16-e0c2-4848-ad0b-0ca4ee5cc33b",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'http://swapi.co/api/planets/',",
+							"    method: 'GET',",
+							"},function (err, response) {",
+							"    var count = response.json().count;",
+							"    var biggerCount;",
+							"    count += 1;",
+							"    biggerCount = Math.floor(Math.random() * 1000 + count);",
+							"    pm.environment.set(\"biggerCount\", biggerCount);",
+							"    console.log(biggerCount);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://swapi.co/api/planets/{{biggerCount}}",
+					"protocol": "http",
+					"host": [
+						"swapi",
+						"co"
+					],
+					"path": [
+						"api",
+						"planets",
+						"{{biggerCount}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
