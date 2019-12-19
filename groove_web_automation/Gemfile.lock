@@ -51,7 +51,7 @@ GEM
     page_navigation (0.10)
       data_magic (>= 0.22)
     public_suffix (3.0.2)
-    rack (2.0.5)
+    rack (2.0.8)
     rack-test (1.0.0)
       rack (>= 1.0, < 3)
     rake (12.3.1)
